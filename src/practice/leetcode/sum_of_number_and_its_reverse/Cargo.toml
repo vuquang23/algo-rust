@@ -1,0 +1,6 @@
+[package]
+name = "sum_of_number_and_its_reverse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
