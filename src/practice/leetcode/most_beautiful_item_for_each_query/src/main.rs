@@ -7,39 +7,36 @@ impl Solution {
         use std::cmp::{max, Ordering};
         struct Data {
             t: u8,
-            idx: usize,
+            k: i32,
+            v: i32,
         }
 
         let mut result: Vec<i32> = Vec::with_capacity(queries.len());
         result.resize(queries.len(), 0);
         let mut all: Vec<Data> = Vec::with_capacity(items.len() + queries.len());
-        for i in 0..items.len() {
-            all.push(Data { t: 0, idx: i });
+        for (_, item) in items.iter().enumerate() {
+            all.push(Data {
+                t: 0,
+                k: item[0],
+                v: item[1],
+            });
         }
-        for i in 0..queries.len() {
-            all.push(Data { t: 1, idx: i });
+        for (i, q) in queries.iter().enumerate() {
+            all.push(Data {
+                t: 1,
+                k: *q,
+                v: i as i32,
+            });
         }
 
-        all.sort_by(|a, b| -> Ordering {
-            let price_a = if a.t == 0 {
-                items[a.idx][0]
-            } else {
-                queries[a.idx]
-            };
-            let price_b = if b.t == 0 {
-                items[b.idx][0]
-            } else {
-                queries[b.idx]
-            };
-            price_a.cmp(&price_b)
-        });
+        all.sort_by(|a, b| -> Ordering { a.k.cmp(&b.k) });
 
         let mut mx = 0;
         for d in all.iter() {
             if d.t == 0 {
-                mx = max(mx, items[d.idx][1]);
+                mx = max(mx, d.v);
             } else {
-                result[d.idx] = mx
+                result[d.v as usize] = mx
             }
         }
 
